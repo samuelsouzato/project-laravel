@@ -34,15 +34,37 @@
                         <li class="nav-item">
                             <a href="/" class="nav-link">Eventos</a>
                         </li>
+
                         <li class="nav-item">
-                            <a href="/events/create" class="nav-link">Criar Eventos</a>
+                            <a href="/events/create" class="nav-link">Criar eventos</a>
                         </li>
-                        <li class="nav-item">
-                            <a href="/" class="nav-link">Entrar</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/" class="nav-link">Cadastrar</a>
-                        </li>
+                        
+                        @auth
+                            <li class="nav-item">
+                                <a href="/login" class="nav-link">Meus eventos</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <form action="/logout" method="POST">
+                                    @csrf
+                                    <a href="/logout" 
+                                    class="nav-link" 
+                                    onclick="event.preventDefault();
+                                    this.closest('form').submit();">
+                                        Sair
+                                    </a>
+                                </form>
+                            </li>
+                        @endauth
+                        @guest
+                            <li class="nav-item">
+                                <a href="/login" class="nav-link">Entrar</a>
+                            </li>
+
+                            <li class="nav-item">
+                             <a href="/register" class="nav-link">Cadastrar</a>
+                            </li>
+                        @endguest
                     </ul>
                      
                 </div>
@@ -60,7 +82,7 @@
             </div>
         </main>
         <footer>
-            <p>HDC Events &copy; 2024</p>
+            <p>JSS Events &copy; 2024</p>
         </footer>
         <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

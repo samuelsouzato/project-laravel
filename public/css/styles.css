@@ -177,18 +177,48 @@ header {
     margin-right: 5px;
 }
 
+#info-container #event-submit {
+    margin: 20px 0;
+}
 
+#items-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+#items-list li {
+    display: flex;
+}
+
+#description-container {
+    margin-top: 30px;
+}
+
+/* Dashboard */
+.dashboard-title-container {
+    margin-bottom: 30px;
+    margin-top: 30px;
+}
+
+.dashboard-events-container th {
+    width: 25%;
+}
+
+.dashboard-events-container form {
+    display: inline-block;
+}
 /* footer */
 footer {
     text-align: center;
     background-color: #353e48;
     color: #FFF;
     padding: 30px;
-    position: absolute;
+    position:absolute;
     bottom: 0;
     width: 100%;
 }
 
 footer p {
     margin-bottom: 0;
+
 }
