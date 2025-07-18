@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Http;
+use App\Http\Requests\StoreEventRequest;
 use Illuminate\Http\Request;
 
 use App\Models\Event;
@@ -30,7 +32,7 @@ class EventController extends Controller
         return view('events.create');
     }
 
-    public function store (Request $request) {
+    public function store (StoreEventRequest $request) {
 
         $event = new Event();
 
@@ -40,6 +42,17 @@ class EventController extends Controller
         $event->private = $request->private;
         $event->description = $request->description;
         $event->items = $request->items;
+        
+        
+        // Validate the image
+        $requestImage = $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);[
+        'image.required' => 'Por favor, envie uma imagem.',
+        'image.image' => 'O arquivo precisa ser uma imagem.',
+        'image.mimes' => 'A imagem deve estar nos formatos: jpeg, png, jpg ou gif.',
+        'image.max' => 'A imagem não pode ultrapassar 2MB.',
+        ];
 
         // Image Upload
         if($request->hasFile('image') && $request->file('image')->isValid()) {
@@ -53,6 +66,19 @@ class EventController extends Controller
             $requestImage->move(public_path('img/events'), $imageName);
 
             $event->image = $imageName;
+
+            // Envia para a API Python após salvar
+            $imagePath = public_path('img/events/' . $imageName);
+        try {
+            $response = Http::attach(
+                'file', fopen($imagePath, 'r'), $imageName
+            )->post('http://127.0.0.1:8000/redimensionar/');
+
+            logger($response->json()); // Apenas para teste/log
+        } catch (\Exception $e) {
+            logger('Erro ao enviar imagem para a API Python: ' . $e->getMessage());
+        }
+            
 
         }
 

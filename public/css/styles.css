@@ -239,3 +239,57 @@ footer p {
     margin-bottom: 0;
 
 }
+
+/* Estiliza o botão falso */
+.custom-file-upload {
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    background-color: #F2a340;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Oculta o input de arquivo real */
+.custom-file-upload input[type="file"] {
+    display: none;
+}
+
+/* Nome do arquivo */
+#file-name {
+    margin-left: 10px;
+    font-style: italic;
+}
+
+/* ==== Tratamento de Erros ==== */
+
+/* Mensagem de erro específica de campo */
+.text-danger {
+    color: #e74c3c;
+    font-size: 0.9rem;
+    margin-top: 4px;
+}
+
+/* Caixa de erro geral (bloco de mensagens no topo) */
+.alert-danger {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 10px;
+    border-radius: 5px;
+    color: #721c24;
+    margin-bottom: 20px;
+}
+
+/* Campo com erro: borda vermelha */
+.input-error {
+    border: 1px solid #e74c3c !important;
+    background-color: #fff6f6;
+}
+
+input[type="file"].input-error {
+    border: 1px solid #e74c3c;
+    background-color: #fff6f6;
+    padding: 5px;
+}
