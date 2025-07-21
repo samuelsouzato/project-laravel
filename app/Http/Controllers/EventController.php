@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage, Http;
 use App\Http\Requests\StoreEventRequest;
 use Illuminate\Http\Request;
 
@@ -46,12 +46,12 @@ class EventController extends Controller
         
         // Validate the image
         $requestImage = $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif',
         ]);[
         'image.required' => 'Por favor, envie uma imagem.',
         'image.image' => 'O arquivo precisa ser uma imagem.',
         'image.mimes' => 'A imagem deve estar nos formatos: jpeg, png, jpg ou gif.',
-        'image.max' => 'A imagem não pode ultrapassar 2MB.',
+        
         ];
 
         // Image Upload
@@ -74,7 +74,15 @@ class EventController extends Controller
                 'file', fopen($imagePath, 'r'), $imageName
             )->post('http://127.0.0.1:8000/redimensionar/');
 
-            logger($response->json()); // Apenas para teste/log
+           if ($response->successful()) {
+            // Salva a imagem redimensionada no lugar da original
+                $processedImage = $response->body();
+                Storage::disk('public')->put("img/events/{$imageName}", $processedImage);
+                $event->image = $imageName;
+            } else {
+                logger('Erro ao processar imagem: ' . $response->status());
+            }
+
         } catch (\Exception $e) {
             logger('Erro ao enviar imagem para a API Python: ' . $e->getMessage());
         }

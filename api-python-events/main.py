@@ -1,5 +1,5 @@
 from fastapi import FastAPI, File, UploadFile
-from fastapi.responses import JSONResponse
+from fastapi.responses import StreamingResponse, JSONResponse
 from PIL import Image
 import io
 
@@ -15,15 +15,16 @@ async def redimensionar_imagem(file: UploadFile = File(...)):
         # Lê a imagem enviada
         imagem = Image.open(io.BytesIO(await file.read()))
         
+        
         # Redimensiona para 300x300
-        nova_imagem = imagem.resize((300, 300))
+        max_size = (300, 300)
+        imagem.thumbnail(max_size)
         
         # Converte para bytes para simular um "processamento"
         output = io.BytesIO()
-        nova_imagem.save(output, format="JPEG")
+        imagem.save(output, format="JPEG")
         output.seek(0)
         
-        return {"status": "Imagem redimensionada com sucesso", "filename": file.filename}
-
+        return StreamingResponse(output, media_type="image/jpeg")
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=400)

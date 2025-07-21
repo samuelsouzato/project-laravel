@@ -27,7 +27,7 @@ class StoreEventRequest extends FormRequest
             'city' => 'required|string|max:100',
             'description' => 'required|string',
             'items' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif',
         ];
     }
 
